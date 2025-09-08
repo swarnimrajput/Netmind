@@ -1,0 +1,29 @@
+---
+- name: Gather facts from FRR routers
+  hosts: all
+  gather_facts: no
+  
+  tasks:
+    - name: Run FRR show version command
+      raw: vtysh -c "show version"
+      register: version_output
+      
+    - name: Display version output
+      debug:
+        var: version_output.stdout_lines
+        
+    - name: Show OSPF neighbors
+      raw: vtysh -c "show ip ospf neighbor"
+      register: ospf_neighbors
+      
+    - name: Display OSPF neighbors
+      debug:
+        var: ospf_neighbors.stdout_lines
+
+    - name: Show interface summary
+      raw: vtysh -c "show interface brief"
+      register: interface_summary
+      
+    - name: Display interface summary
+      debug:
+        var: interface_summary.stdout_lines

@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  gns3-server:
+    image: jsimonetti/gns3-server:latest
+    container_name: gns3-server
+    privileged: true
+    ports:
+      - "3080:3080"
+      - "32768-33792:32768-33792"
+    volumes:
+      - ./projects:/opt/gns3/projects
+      - ./images:/opt/gns3/images
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    environment:
+      - GNS3_SERVER_HOST=0.0.0.0
+      - GNS3_SERVER_PORT=3080

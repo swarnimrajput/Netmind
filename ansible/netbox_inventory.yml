@@ -1,0 +1,11 @@
+plugin: netbox.netbox.nb_inventory
+api_endpoint: http://localhost:8000
+token: c316eac1941ee8fdd5059e4f9e777648459ab551
+validate_certs: false
+
+compose:
+  ansible_host: custom_fields.ansible_host
+  ansible_connection: custom_fields.ansible_connection
+  ansible_network_os: custom_fields.ansible_network_os
+  ansible_user: custom_fields.ansible_user
+  ansible_password: custom_fields.ansible_password
