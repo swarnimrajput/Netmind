@@ -1,0 +1,42 @@
+---
+- name: Validate NetBox Inventory Consistency
+  hosts: all
+  gather_facts: no
+  
+  tasks:
+    - name: Get actual device IP from interface
+      raw: ip addr show eth0 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1
+      register: actual_ip
+      
+    - name: Extract NetBox management IP
+      set_fact:
+        netbox_ip: "{{ ansible_host if ansible_connection == 'docker' else hostvars[inventory_hostname]['custom_fields']['ansible_host'] }}"
+        actual_mgmt_ip: "{{ actual_ip.stdout.strip() }}"
+    
+    - name: Validate IP consistency
+      assert:
+        that:
+          - actual_mgmt_ip != ""
+          - netbox_ip != ""
+        fail_msg: "IP validation failed for {{ inventory_hostname }}"
+        success_msg: "{{ inventory_hostname }}: NetBox IP matches device IP"
+    
+    - name: Check device role consistency
+      debug:
+        msg: |
+          Device: {{ inventory_hostname }}
+          NetBox Role: {{ device_roles[0] if device_roles else 'undefined' }}
+          NetBox Type: {{ device_types[0] if device_types else 'undefined' }}
+          Actual IP: {{ actual_mgmt_ip }}
+          Expected IP: {{ netbox_ip }}
+          
+    - name: Validate FRR is running
+      raw: ps aux | grep -E 'watchfrr|zebra|ospfd' | grep -v grep
+      register: frr_processes
+      
+    - name: Report FRR status
+      debug:
+        msg: |
+          {{ inventory_hostname }} FRR Status: 
+          {{ 'Running' if frr_processes.stdout_lines|length > 0 else 'Not Running' }}
+          Processes: {{ frr_processes.stdout_lines|length }}

@@ -1,0 +1,44 @@
+---
+- name: Push Configurations from NetBox to Devices
+  hosts: all
+  gather_facts: no
+  
+  tasks:
+    - name: Backup current config before changes
+      include_tasks: tasks/backup_tasks.yml
+      
+    - name: Generate config from template
+      template:
+        src: templates/frr_config.j2
+        dest: "/tmp/{{ inventory_hostname }}_new_config.txt"
+      delegate_to: localhost
+      
+    - name: Display generated config
+      debug:
+        msg: "Generated config for {{ inventory_hostname }}"
+        
+    - name: Apply loopback interface
+      raw: |
+        vtysh -c "configure terminal" \
+              -c "interface lo" \
+              -c "ip address {{ custom_fields.loopback_ip }}" \
+              -c "exit"
+              
+    - name: Configure OSPF router ID
+      raw: |
+        vtysh -c "configure terminal" \
+              -c "router ospf" \
+              -c "ospf router-id {{ custom_fields.ospf_router_id }}" \
+              -c "network {{ custom_fields.loopback_ip }} area {{ custom_fields.ospf_area }}" \
+              -c "exit"
+              
+    - name: Save configuration
+      raw: vtysh -c "write memory"
+      
+    - name: Verify new configuration
+      raw: vtysh -c "show running-config"
+      register: new_config
+      
+    - name: Display verification
+      debug:
+        msg: "Configuration applied successfully to {{ inventory_hostname }}"

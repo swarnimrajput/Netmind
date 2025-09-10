@@ -1,0 +1,36 @@
+---
+- name: Test Configuration Changes Safely
+  hosts: all
+  gather_facts: no
+  
+  tasks:
+    - name: Check current OSPF neighbors (before)
+      raw: vtysh -c "show ip ospf neighbor"
+      register: ospf_before
+      
+    - name: Check current BGP status (before)
+      raw: vtysh -c "show ip bgp summary"
+      register: bgp_before
+      ignore_errors: yes
+      
+    - name: Display pre-change status
+      debug:
+        msg: |
+          {{ inventory_hostname }} - Before Changes:
+          OSPF Neighbors: {{ ospf_before.stdout_lines | length }} lines
+          BGP Status: {{ 'Running' if bgp_before.rc == 0 else 'Not configured' }}
+          
+    - name: Test connectivity to neighbors
+      raw: |
+        {% for host in groups['all'] %}
+        {% if host != inventory_hostname %}
+        ping -c 2 {{ hostvars[host]['ansible_host'] }}
+        {% endif %}
+        {% endfor %}
+      register: connectivity_test
+      
+    - name: Report connectivity
+      debug:
+        msg: |
+          {{ inventory_hostname }} connectivity test:
+          {{ 'PASSED' if connectivity_test.rc == 0 else 'FAILED' }}

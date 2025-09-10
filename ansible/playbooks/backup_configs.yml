@@ -1,0 +1,58 @@
+---
+- name: Backup FRR Device Configurations
+  hosts: all
+  gather_facts: no  # Disable facts for network devices
+  vars:
+    backup_dir: "./backups"
+    
+  tasks:
+    - name: Get current timestamp
+      local_action:
+        module: command
+        cmd: date '+%Y-%m-%d_%H%M'
+      register: timestamp
+      run_once: true
+      
+    - name: Create backup directory
+      local_action:
+        module: file
+        path: "{{ backup_dir }}"
+        state: directory
+      run_once: true
+      
+    - name: Get running configuration
+      raw: vtysh -c "show running-config"
+      register: running_config
+      
+    - name: Get system information
+      raw: vtysh -c "show version"
+      register: system_info
+      
+    - name: Get current date for header
+      raw: date
+      register: current_date
+      
+    - name: Save running config to file
+      local_action:
+        module: copy
+        content: |
+          ! Backup created: {{ current_date.stdout.strip() }}
+          ! Device: {{ inventory_hostname }}
+          ! Management IP: {{ ansible_host }}
+          !
+          {{ system_info.stdout }}
+          !
+          {{ running_config.stdout }}
+        dest: "{{ backup_dir }}/{{ inventory_hostname }}_config_{{ timestamp.stdout }}.txt"
+        
+    - name: Create latest config symlink
+      local_action:
+        module: file
+        src: "{{ inventory_hostname }}_config_{{ timestamp.stdout }}.txt"
+        dest: "{{ backup_dir }}/{{ inventory_hostname }}_latest.txt"
+        state: link
+        force: yes
+        
+    - name: Display backup location
+      debug:
+        msg: "Config backed up to: {{ backup_dir }}/{{ inventory_hostname }}_config_{{ timestamp.stdout }}.txt"

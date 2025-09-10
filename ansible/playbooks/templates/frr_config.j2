@@ -1,0 +1,34 @@
+!
+! FRRouting configuration for {{ inventory_hostname }}
+! Generated via Ansible automation
+!
+hostname {{ inventory_hostname }}
+!
+! Loopback interface
+interface lo
+ ip address {{ custom_fields.loopback_ip }}
+!
+! Management interface  
+interface eth0
+ ip address {{ ansible_host }}/24
+ no shutdown
+!
+! OSPF Configuration
+router ospf
+ ospf router-id {{ custom_fields.ospf_router_id }}
+ network {{ ansible_host }}/32 area {{ custom_fields.ospf_area }}
+ network {{ custom_fields.loopback_ip }} area {{ custom_fields.ospf_area }}
+ network 10.0.0.0/24 area {{ custom_fields.ospf_area }}
+!
+! BGP Configuration
+router bgp {{ custom_fields.bgp_asn }}
+ bgp router-id {{ custom_fields.ospf_router_id }}
+ bgp log-neighbor-changes
+{% for host in groups['all'] %}
+{% if host != inventory_hostname %}
+ neighbor {{ hostvars[host]['custom_fields']['loopback_ip'] | regex_replace('/32', '') }} remote-as {{ hostvars[host]['custom_fields']['bgp_asn'] }}
+ neighbor {{ hostvars[host]['custom_fields']['loopback_ip'] | regex_replace('/32', '') }} update-source lo
+{% endif %}
+{% endfor %}
+!
+end

@@ -1,0 +1,55 @@
+---
+- name: Get current timestamp
+  local_action:
+    module: command
+    cmd: date '+%Y-%m-%d_%H%M'
+  register: timestamp
+  run_once: true
+  when: not ansible_check_mode
+
+- name: Create backup directory
+  local_action:
+    module: file
+    path: "./backups"
+    state: directory
+  run_once: true
+  when: not ansible_check_mode
+
+- name: Get running configuration
+  raw: vtysh -c "show running-config"
+  register: running_config
+  when: not ansible_check_mode
+
+- name: Get system information
+  raw: vtysh -c "show version"
+  register: system_info
+  when: not ansible_check_mode
+
+- name: Get current date for header
+  raw: date
+  register: current_date
+  when: not ansible_check_mode
+
+- name: Save running config to file
+  local_action:
+    module: copy
+    content: |
+      ! Backup created: {{ current_date.stdout.strip() }}
+      ! Device: {{ inventory_hostname }}
+      ! Management IP: {{ ansible_host }}
+      !
+      {{ system_info.stdout }}
+      !
+      {{ running_config.stdout }}
+    dest: "./backups/{{ inventory_hostname }}_config_{{ timestamp.stdout }}.txt"
+  when: not ansible_check_mode
+
+- name: Display backup location
+  debug:
+    msg: "Config backed up to: ./backups/{{ inventory_hostname }}_config_{{ timestamp.stdout if timestamp is defined else 'unknown' }}.txt"
+  when: not ansible_check_mode
+
+- name: Skip backup in check mode
+  debug:
+    msg: "Backup skipped in check mode for {{ inventory_hostname }}"
+  when: ansible_check_mode
