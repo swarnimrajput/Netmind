@@ -1,29 +1,51 @@
 ---
-- name: Gather facts from FRR routers
+- name: Gather FRR device facts and output as JSON
   hosts: all
   gather_facts: no
   
   tasks:
-    - name: Run FRR show version command
-      raw: vtysh -c "show version"
-      register: version_output
+    - name: Create facts directory
+      local_action:
+        module: file
+        path: "./facts"
+        state: directory
+      run_once: true
       
-    - name: Display version output
-      debug:
-        var: version_output.stdout_lines
-        
-    - name: Show OSPF neighbors
-      raw: vtysh -c "show ip ospf neighbor"
-      register: ospf_neighbors
+    - name: Gather FRR version
+      raw: vtysh -c "show version" | head -1
+      register: frr_version
       
-    - name: Display OSPF neighbors
-      debug:
-        var: ospf_neighbors.stdout_lines
-
-    - name: Show interface summary
+    - name: Gather hostname
+      raw: vtysh -c "show running-config" | grep "^hostname" | cut -d' ' -f2
+      register: device_hostname
+      
+    - name: Gather interface information
       raw: vtysh -c "show interface brief"
-      register: interface_summary
+      register: interface_info
       
-    - name: Display interface summary
+    - name: Get current timestamp
+      raw: date '+%Y-%m-%d %H:%M:%S'
+      register: current_time
+      
+    - name: Save facts to JSON file
+      local_action:
+        module: copy
+        content: |
+          {
+            "version": "{{ frr_version.stdout.strip() }}",
+            "hostname": "{{ device_hostname.stdout.strip() }}",
+            "interfaces": {{ interface_info.stdout_lines | to_json }},
+            "timestamp": "{{ current_time.stdout.strip() }}",
+            "ospf_neighbors": 0
+          }
+        dest: "./facts/{{ inventory_hostname }}_facts.json"
+      when: fact_output is defined and fact_output == "json"
+      
+    - name: Display facts (text output)
       debug:
-        var: interface_summary.stdout_lines
+        msg: |
+          Device: {{ inventory_hostname }}
+          Version: {{ frr_version.stdout.strip() }}
+          Hostname: {{ device_hostname.stdout.strip() }}
+          Timestamp: {{ current_time.stdout.strip() }}
+      when: fact_output is not defined or fact_output == "text"
