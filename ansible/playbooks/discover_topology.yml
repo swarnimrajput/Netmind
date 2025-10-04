@@ -1,0 +1,32 @@
+---
+- name: Discover Network Topology
+  hosts: all
+  gather_facts: false
+  
+  tasks:
+    - name: Get OSPF neighbor information
+      raw: vtysh -c "show ip ospf neighbor"
+      register: ospf_neighbors
+      ignore_errors: true
+      
+    - name: Get interface information
+      raw: vtysh -c "show interface brief"
+      register: interface_info
+      
+    - name: Get IP routing table
+      raw: vtysh -c "show ip route"
+      register: routing_table
+      
+    - name: Save topology facts
+      copy:
+        content: |
+          {
+            "device": "{{ inventory_hostname }}",
+            "timestamp": "{{ ansible_date_time.iso8601 }}",
+            "ospf_neighbors": {{ ospf_neighbors.stdout | default("") | to_json }},
+            "interfaces": {{ interface_info.stdout | default("") | to_json }},
+            "routing_table": {{ routing_table.stdout | default("") | to_json }}
+          }
+        dest: "../topology/{{ inventory_hostname }}_topology.json"
+        mode: '0644'
+      delegate_to: localhost

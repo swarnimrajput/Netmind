@@ -1,0 +1,58 @@
+[2025-10-04 22:03:56] 🚀 Starting Network Automation Test Pipeline
+[2025-10-04 22:03:56] 🧪 Testing Ansible inventory...
+[WARNING]: Invalid characters were found in group names but not replaced, use
+-vvvv to see details
+ERROR! Decryption failed (no vault secrets were found that could decrypt) on /Users/swarnimrajput/Netmind/ansible/group_vars/all/vault.yml
+[2025-10-04 22:03:58] [ERROR] ❌ Ansible inventory failed
+[2025-10-04 22:03:58] 🔗 Testing device connectivity...
+[2025-10-04 22:03:58] ⚠️ Direct connectivity failed, containers may be down
+[2025-10-04 22:03:58] 🧪 Testing Backup playbook...
+[WARNING]: Invalid characters were found in group names but not replaced, use
+-vvvv to see details
+ERROR! conflicting action statements: file, run_once_per_host
+
+The error appears to be in '/Users/swarnimrajput/Netmind/ansible/playbooks/backup_configs.yml': line 9, column 7, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+  tasks:
+    - name: Create backup directory
+      ^ here
+[2025-10-04 22:03:59] [ERROR] ❌ Backup playbook failed
+[2025-10-04 22:03:59] 🧪 Testing Configuration push...
+[WARNING]: Invalid characters were found in group names but not replaced, use
+-vvvv to see details
+
+PLAY [Push Configurations from NetBox to Devices] ******************************
+ERROR! Decryption failed (no vault secrets were found that could decrypt) on /Users/swarnimrajput/Netmind/ansible/group_vars/all/vault.yml
+[2025-10-04 22:04:00] [ERROR] ❌ Configuration push failed
+[2025-10-04 22:04:00] 🧪 Testing Facts collection...
+[WARNING]: Invalid characters were found in group names but not replaced, use
+-vvvv to see details
+
+PLAY [Collect FRR device facts] ************************************************
+ERROR! Decryption failed (no vault secrets were found that could decrypt) on /Users/swarnimrajput/Netmind/ansible/group_vars/all/vault.yml
+[2025-10-04 22:04:01] [ERROR] ❌ Facts collection failed
+[2025-10-04 22:04:01] 🔄 Testing NetBox synchronization...
+2025-10-04 22:04:01,351 - INFO - Step 1: Loading device facts...
+2025-10-04 22:04:01,352 - INFO - Loading device facts from JSON files...
+2025-10-04 22:04:01,352 - INFO - Loaded facts for Router-1
+2025-10-04 22:04:01,352 - INFO - Loaded facts for Router-3
+2025-10-04 22:04:01,353 - INFO - Loaded facts for Router-2
+2025-10-04 22:04:01,353 - INFO - Step 2: Connecting to NetBox...
+2025-10-04 22:04:01,353 - INFO - Retrieving current NetBox data...
+2025-10-04 22:04:01,458 - INFO - Retrieved NetBox data for 3 devices
+============================================================
+NetBox Source of Truth Round-Trip Sync
+============================================================
+Started at: 2025-10-04 22:04:01
+✅ Loaded facts from 3 devices
+✅ Retrieved NetBox data for 3 devices
+✅ NetBox sync test completed
+[2025-10-04 22:04:01] ✅ NetBox sync test passed
+[2025-10-04 22:04:01] ⚡ Running performance benchmarks...
+[2025-10-04 22:04:03] 📈 Pipeline benchmark: 2s
+[2025-10-04 22:04:03] 📋 Generating test report...
+[2025-10-04 22:04:03] 📋 Test report generated: /Users/swarnimrajput/Netmind/test_results/test_report.html
+[2025-10-04 22:04:03] [ERROR] ❌ 5 test(s) failed. Check logs for details.

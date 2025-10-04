@@ -1,0 +1,45 @@
+name: frr-automation-lab
+
+topology:
+  nodes:
+    R1:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        - ip addr add 10.0.0.1/24 dev eth1
+        - ip addr add 1.1.1.1/32 dev lo
+        - ip link set eth1 up
+        - /usr/lib/frr/frrinit.sh start
+      ports:
+        - "2001:22"
+      
+    R2:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        - ip addr add 10.0.0.2/24 dev eth1
+        - ip addr add 2.2.2.2/32 dev lo
+        - ip link set eth1 up
+        - /usr/lib/frr/frrinit.sh start
+      ports:
+        - "2002:22"
+        
+    R3:
+      kind: linux
+      image: frrouting/frr:latest
+      exec:
+        - ip addr add 10.0.0.3/24 dev eth1
+        - ip addr add 3.3.3.3/32 dev lo
+        - ip link set eth1 up
+        - /usr/lib/frr/frrinit.sh start
+      ports:
+        - "2003:22"
+
+  links:
+    - endpoints: ["R1:eth1", "R2:eth1"]
+    - endpoints: ["R2:eth1", "R3:eth1"]
+    - endpoints: ["R1:eth1", "R3:eth1"]
+
+mgmt:
+  network: mgmt
+  ipv4_subnet: 172.20.20.0/24

@@ -1,0 +1,12 @@
+---
+# Public variables that reference vault secrets
+netbox_api_token: "{{ vault_netbox_api_token }}"
+snmp_community: "{{ vault_snmp_community }}"
+ntp_auth_key: "{{ vault_ntp_auth_key }}"
+syslog_server: "{{ vault_syslog_server }}"
+backup_server: "{{ vault_backup_server_credentials }}"
+
+# Non-sensitive configuration
+netbox_url: "http://localhost:8000"
+backup_retention_days: 30
+config_backup_enabled: true

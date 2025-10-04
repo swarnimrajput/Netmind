@@ -1,0 +1,49 @@
+{
+  "nodes": [
+    {
+      "id": "Router-1",
+      "name": "Router-1",
+      "type": "router",
+      "platform": "FRRouting",
+      "site": "Demo-Site",
+      "status": "Active",
+      "primary_ip": null
+    },
+    {
+      "id": "Router-2",
+      "name": "Router-2",
+      "type": "router",
+      "platform": "FRRouting",
+      "site": "Demo-Site",
+      "status": "Active",
+      "primary_ip": null
+    },
+    {
+      "id": "Router-3",
+      "name": "Router-3",
+      "type": "router",
+      "platform": "FRRouting",
+      "site": "Demo-Site",
+      "status": "Active",
+      "primary_ip": null
+    }
+  ],
+  "connections": [
+    {
+      "source": "Router-1",
+      "target": "Router-2",
+      "type": "ethernet"
+    },
+    {
+      "source": "Router-2",
+      "target": "Router-3",
+      "type": "ethernet"
+    },
+    {
+      "source": "Router-1",
+      "target": "Router-3",
+      "type": "ethernet"
+    }
+  ],
+  "discovered_at": "2025-10-04T21:50:40.874721"
+}

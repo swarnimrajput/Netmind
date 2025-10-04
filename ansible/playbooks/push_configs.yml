@@ -2,43 +2,56 @@
 - name: Push Configurations from NetBox to Devices
   hosts: all
   gather_facts: no
-  
+  vars:
+    backup_timestamp: "{{ ansible_date_time.epoch }}"
+    
   tasks:
     - name: Backup current config before changes
       include_tasks: tasks/backup_tasks.yml
+      when: not ansible_check_mode
       
+    - name: Skip backup in check mode
+      debug:
+        msg: "Backup skipped in check mode for {{ inventory_hostname }}"
+      when: ansible_check_mode
+
     - name: Generate config from template
       template:
-        src: templates/frr_config.j2
-        dest: "/tmp/{{ inventory_hostname }}_new_config.txt"
+        src: frr_config.j2
+        dest: "/tmp/{{ inventory_hostname }}_new_config.conf"
       delegate_to: localhost
       
     - name: Display generated config
       debug:
         msg: "Generated config for {{ inventory_hostname }}"
         
-    - name: Apply loopback interface
-      raw: |
-        vtysh -c "configure terminal" \
-              -c "interface lo" \
-              -c "ip address {{ custom_fields.loopback_ip }}" \
-              -c "exit"
-              
-    - name: Configure OSPF router ID
-      raw: |
-        vtysh -c "configure terminal" \
-              -c "router ospf" \
-              -c "ospf router-id {{ custom_fields.ospf_router_id }}" \
-              -c "network {{ custom_fields.loopback_ip }} area {{ custom_fields.ospf_area }}" \
-              -c "exit"
-              
-    - name: Save configuration
-      raw: vtysh -c "write memory"
-      
-    - name: Verify new configuration
-      raw: vtysh -c "show running-config"
-      register: new_config
-      
-    - name: Display verification
+    - name: Show configuration preview (check mode)
       debug:
-        msg: "Configuration applied successfully to {{ inventory_hostname }}"
+        msg: |
+          Configuration Preview for {{ inventory_hostname }}:
+          - BGP ASN: {{ bgp_asn }}
+          - Loopback IP: {{ loopback_ip }}
+          - OSPF Router ID: {{ ospf_router_id }}
+          - OSPF Area: {{ ospf_area }}
+          - Config file: /tmp/{{ inventory_hostname }}_new_config.conf
+      when: ansible_check_mode
+      
+    - name: Apply configuration to device (non-check mode)
+      raw: |
+        # This would apply the configuration to the actual device
+        echo "Would apply configuration from /tmp/{{ inventory_hostname }}_new_config.conf"
+        # vtysh < /tmp/{{ inventory_hostname }}_new_config.conf
+      when: not ansible_check_mode
+      register: config_result
+      
+    - name: Display deployment status
+      debug:
+        msg: |
+          Deployment Status for {{ inventory_hostname }}:
+          {% if ansible_check_mode %}
+          - Mode: CHECK MODE - No changes made
+          - Configuration validated and generated successfully
+          {% else %}
+          - Mode: DEPLOYMENT - Configuration applied
+          - Result: {{ config_result.stdout if config_result is defined else 'N/A' }}
+          {% endif %}

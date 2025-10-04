@@ -2,10 +2,17 @@ plugin: netbox.netbox.nb_inventory
 api_endpoint: http://localhost:8000
 token: c316eac1941ee8fdd5059e4f9e777648459ab551
 validate_certs: false
-
+config_context: false
+flatten_custom_fields: true  # This should flatten custom_fields.bgp_asn to just bgp_asn
 compose:
-  ansible_host: custom_fields.ansible_host
-  ansible_connection: custom_fields.ansible_connection
-  ansible_network_os: custom_fields.ansible_network_os
-  ansible_user: custom_fields.ansible_user
-  ansible_password: custom_fields.ansible_password
+  # Map NetBox fields to Ansible variable names
+  bgp_asn: custom_fields.bgp_asn | default('65001')
+  loopback_ip: custom_fields.loopback_ip | default('1.1.1.1/32')
+  ospf_area: custom_fields.ospf_area | default('0')
+  ospf_router_id: custom_fields.ospf_router_id | default('1.1.1.1')
+group_by:
+  - device_roles
+  - sites
+keyed_groups:
+  - key: device_role.slug
+    prefix: role

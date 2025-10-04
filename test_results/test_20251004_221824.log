@@ -1,0 +1,379 @@
+[2025-10-04 22:18:24] 🚀 Starting Network Automation Test Pipeline
+[2025-10-04 22:18:24] 🧪 Testing Ansible inventory...
+[WARNING]: Invalid characters were found in group names but not replaced, use
+-vvvv to see details
+[WARNING]: Found variable using reserved name: serial
+[WARNING]: Found variable using reserved name: tags
+{
+    "_meta": {
+        "hostvars": {
+            "Router-1": {
+                "ansible_host": "R1",
+                "ansible_network_os": "linux",
+                "ansible_password": "cisco123",
+                "ansible_user": "root",
+                "backup_retention_days": 30,
+                "backup_server": "{{ vault_backup_server_credentials }}",
+                "bgp_asn": "65001",
+                "config_backup_enabled": true,
+                "device_roles": [
+                    "router"
+                ],
+                "device_types": [
+                    "ios-router"
+                ],
+                "is_virtual": false,
+                "local_context_data": [
+                    null
+                ],
+                "locations": [],
+                "loopback_ip": "1.1.1.1/32",
+                "manufacturers": [
+                    "cisco"
+                ],
+                "netbox_api_token": "{{ vault_netbox_api_token }}",
+                "netbox_url": "http://localhost:8000",
+                "ntp_auth_key": "{{ vault_ntp_auth_key }}",
+                "ospf_area": "0",
+                "ospf_router_id": "1.1.1.1",
+                "regions": [],
+                "serial": "",
+                "services": [],
+                "site_groups": [],
+                "sites": [
+                    "demo-site"
+                ],
+                "snmp_community": "{{ vault_snmp_community }}",
+                "software_version": "FRRouting 8.4_git (6ea8ad54aa6d) on Linux(6.10.14-linuxkit).",
+                "status": {
+                    "label": "Active",
+                    "value": "active"
+                },
+                "syslog_server": "{{ vault_syslog_server }}",
+                "tags": [],
+                "vault_ansible_password": "secure_password",
+                "vault_ansible_user": "admin",
+                "vault_netbox_api_token": "c316eac1941ee8fdd5059e4f9e777648459ab551",
+                "vault_netbox_url": "http://localhost:8000",
+                "vault_ntp_servers": [
+                    "pool.ntp.org",
+                    "time.google.com"
+                ],
+                "vault_snmp_community": "private"
+            },
+            "Router-2": {
+                "ansible_host": "R2",
+                "ansible_network_os": "linux",
+                "ansible_password": "cisco123",
+                "ansible_user": "root",
+                "backup_retention_days": 30,
+                "backup_server": "{{ vault_backup_server_credentials }}",
+                "bgp_asn": "65002",
+                "config_backup_enabled": true,
+                "device_roles": [
+                    "router"
+                ],
+                "device_types": [
+                    "ios-router"
+                ],
+                "is_virtual": false,
+                "local_context_data": [
+                    null
+                ],
+                "locations": [],
+                "loopback_ip": "2.2.2.2/32",
+                "manufacturers": [
+                    "cisco"
+                ],
+                "netbox_api_token": "{{ vault_netbox_api_token }}",
+                "netbox_url": "http://localhost:8000",
+                "ntp_auth_key": "{{ vault_ntp_auth_key }}",
+                "ospf_area": "0",
+                "ospf_router_id": "2.2.2.2",
+                "regions": [],
+                "serial": "",
+                "services": [],
+                "site_groups": [],
+                "sites": [
+                    "demo-site"
+                ],
+                "snmp_community": "{{ vault_snmp_community }}",
+                "software_version": "FRRouting 8.4_git (bb0257865180) on Linux(6.10.14-linuxkit).",
+                "status": {
+                    "label": "Active",
+                    "value": "active"
+                },
+                "syslog_server": "{{ vault_syslog_server }}",
+                "tags": [],
+                "vault_ansible_password": "secure_password",
+                "vault_ansible_user": "admin",
+                "vault_netbox_api_token": "c316eac1941ee8fdd5059e4f9e777648459ab551",
+                "vault_netbox_url": "http://localhost:8000",
+                "vault_ntp_servers": [
+                    "pool.ntp.org",
+                    "time.google.com"
+                ],
+                "vault_snmp_community": "private"
+            },
+            "Router-3": {
+                "ansible_host": "R3",
+                "ansible_network_os": "linux",
+                "ansible_password": "cisco123",
+                "ansible_user": "root",
+                "backup_retention_days": 30,
+                "backup_server": "{{ vault_backup_server_credentials }}",
+                "bgp_asn": "65003",
+                "config_backup_enabled": true,
+                "device_roles": [
+                    "router"
+                ],
+                "device_types": [
+                    "ios-router"
+                ],
+                "is_virtual": false,
+                "local_context_data": [
+                    null
+                ],
+                "locations": [],
+                "loopback_ip": "3.3.3.3/32",
+                "manufacturers": [
+                    "cisco"
+                ],
+                "netbox_api_token": "{{ vault_netbox_api_token }}",
+                "netbox_url": "http://localhost:8000",
+                "ntp_auth_key": "{{ vault_ntp_auth_key }}",
+                "ospf_area": "0",
+                "ospf_router_id": "3.3.3.3",
+                "regions": [],
+                "serial": "",
+                "services": [],
+                "site_groups": [],
+                "sites": [
+                    "demo-site"
+                ],
+                "snmp_community": "{{ vault_snmp_community }}",
+                "software_version": "FRRouting 8.4_git (671ccc71dc0b) on Linux(6.10.14-linuxkit).",
+                "status": {
+                    "label": "Active",
+                    "value": "active"
+                },
+                "syslog_server": "{{ vault_syslog_server }}",
+                "tags": [],
+                "vault_ansible_password": "secure_password",
+                "vault_ansible_user": "admin",
+                "vault_netbox_api_token": "c316eac1941ee8fdd5059e4f9e777648459ab551",
+                "vault_netbox_url": "http://localhost:8000",
+                "vault_ntp_servers": [
+                    "pool.ntp.org",
+                    "time.google.com"
+                ],
+                "vault_snmp_community": "private"
+            }
+        }
+    },
+    "all": {
+        "children": [
+            "ungrouped",
+            "sites_demo-site",
+            "device_roles_router"
+        ]
+    },
+    "device_roles_router": {
+        "hosts": [
+            "Router-1",
+            "Router-2",
+            "Router-3"
+        ]
+    },
+    "sites_demo-site": {
+        "hosts": [
+            "Router-1",
+            "Router-2",
+            "Router-3"
+        ]
+    }
+}
+[2025-10-04 22:18:25] ✅ Ansible inventory passed
+[2025-10-04 22:18:25] 🔗 Testing device connectivity...
+[2025-10-04 22:18:26] ⚠️ Direct connectivity failed, containers may be down
+[2025-10-04 22:18:26] 🧪 Testing Backup playbook...
+[WARNING]: Invalid characters were found in group names but not replaced, use
+-vvvv to see details
+[WARNING]: Found variable using reserved name: tags
+[WARNING]: Found variable using reserved name: serial
+
+PLAY [Backup device configurations] ********************************************
+
+TASK [Create backup directory] *************************************************
+changed: [Router-2 -> localhost]
+changed: [Router-1 -> localhost]
+changed: [Router-3 -> localhost]
+
+TASK [Get running configuration (mock for testing)] ****************************
+ok: [Router-1]
+ok: [Router-2]
+ok: [Router-3]
+
+TASK [Save configuration to backup file] ***************************************
+changed: [Router-1 -> localhost]
+changed: [Router-2 -> localhost]
+changed: [Router-3 -> localhost]
+
+TASK [Display backup status] ***************************************************
+ok: [Router-1] => {
+    "msg": "✅ Backup saved for Router-1 at 2025-10-04-22-18-27"
+}
+ok: [Router-2] => {
+    "msg": "✅ Backup saved for Router-2 at 2025-10-04-22-18-27"
+}
+ok: [Router-3] => {
+    "msg": "✅ Backup saved for Router-3 at 2025-10-04-22-18-27"
+}
+
+PLAY RECAP *********************************************************************
+Router-1                   : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+Router-2                   : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+Router-3                   : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+[2025-10-04 22:18:28] ✅ Backup playbook passed
+[2025-10-04 22:18:28] 🧪 Testing Configuration push...
+[WARNING]: Invalid characters were found in group names but not replaced, use
+-vvvv to see details
+[WARNING]: Found variable using reserved name: serial
+[WARNING]: Found variable using reserved name: tags
+
+PLAY [Push Configurations from NetBox to Devices] ******************************
+
+TASK [Backup current config before changes] ************************************
+skipping: [Router-1]
+skipping: [Router-2]
+skipping: [Router-3]
+
+TASK [Skip backup in check mode] ***********************************************
+ok: [Router-1] => {
+    "msg": "Backup skipped in check mode for Router-1"
+}
+ok: [Router-2] => {
+    "msg": "Backup skipped in check mode for Router-2"
+}
+ok: [Router-3] => {
+    "msg": "Backup skipped in check mode for Router-3"
+}
+
+TASK [Generate config from template] *******************************************
+changed: [Router-2 -> localhost]
+changed: [Router-1 -> localhost]
+changed: [Router-3 -> localhost]
+
+TASK [Display generated config] ************************************************
+ok: [Router-1] => {
+    "msg": "Generated config for Router-1"
+}
+ok: [Router-2] => {
+    "msg": "Generated config for Router-2"
+}
+ok: [Router-3] => {
+    "msg": "Generated config for Router-3"
+}
+
+TASK [Show configuration preview (check mode)] *********************************
+ok: [Router-1] => {
+    "msg": "Configuration Preview for Router-1:\n- BGP ASN: 65001\n- Loopback IP: 1.1.1.1/32\n- OSPF Router ID: 1.1.1.1\n- OSPF Area: 0\n- Config file: /tmp/Router-1_new_config.conf\n"
+}
+ok: [Router-2] => {
+    "msg": "Configuration Preview for Router-2:\n- BGP ASN: 65002\n- Loopback IP: 2.2.2.2/32\n- OSPF Router ID: 2.2.2.2\n- OSPF Area: 0\n- Config file: /tmp/Router-2_new_config.conf\n"
+}
+ok: [Router-3] => {
+    "msg": "Configuration Preview for Router-3:\n- BGP ASN: 65003\n- Loopback IP: 3.3.3.3/32\n- OSPF Router ID: 3.3.3.3\n- OSPF Area: 0\n- Config file: /tmp/Router-3_new_config.conf\n"
+}
+
+TASK [Apply configuration to device (non-check mode)] **************************
+skipping: [Router-1]
+skipping: [Router-2]
+skipping: [Router-3]
+
+TASK [Display deployment status] ***********************************************
+ok: [Router-1] => {
+    "msg": "Deployment Status for Router-1:\n- Mode: CHECK MODE - No changes made\n- Configuration validated and generated successfully\n"
+}
+ok: [Router-2] => {
+    "msg": "Deployment Status for Router-2:\n- Mode: CHECK MODE - No changes made\n- Configuration validated and generated successfully\n"
+}
+ok: [Router-3] => {
+    "msg": "Deployment Status for Router-3:\n- Mode: CHECK MODE - No changes made\n- Configuration validated and generated successfully\n"
+}
+
+PLAY RECAP *********************************************************************
+Router-1                   : ok=5    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+Router-2                   : ok=5    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+Router-3                   : ok=5    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+
+[2025-10-04 22:18:29] ✅ Configuration push passed
+[2025-10-04 22:18:29] 🧪 Testing Facts collection...
+[WARNING]: Invalid characters were found in group names but not replaced, use
+-vvvv to see details
+[WARNING]: Found variable using reserved name: serial
+[WARNING]: Found variable using reserved name: tags
+
+PLAY [Collect FRR device facts] ************************************************
+
+TASK [Create facts directory] **************************************************
+ok: [Router-1 -> localhost]
+
+TASK [Test container connectivity] *********************************************
+fatal: [Router-1]: FAILED! => {"msg": "to use the 'ssh' connection type with passwords or pkcs11_provider, you must install the sshpass program"}
+...ignoring
+fatal: [Router-2]: FAILED! => {"msg": "to use the 'ssh' connection type with passwords or pkcs11_provider, you must install the sshpass program"}
+...ignoring
+fatal: [Router-3]: FAILED! => {"msg": "to use the 'ssh' connection type with passwords or pkcs11_provider, you must install the sshpass program"}
+...ignoring
+
+TASK [Create device facts (with manual timestamp)] *****************************
+ok: [Router-1]
+ok: [Router-2]
+ok: [Router-3]
+
+TASK [Save facts to JSON file] *************************************************
+changed: [Router-2 -> localhost]
+changed: [Router-3 -> localhost]
+changed: [Router-1 -> localhost]
+
+TASK [Display facts collection status] *****************************************
+ok: [Router-1] => {
+    "msg": "✅ Facts collected for Router-1: BGP 65001, Loopback 1.1.1.1/32, Status mock"
+}
+ok: [Router-2] => {
+    "msg": "✅ Facts collected for Router-2: BGP 65002, Loopback 2.2.2.2/32, Status mock"
+}
+ok: [Router-3] => {
+    "msg": "✅ Facts collected for Router-3: BGP 65003, Loopback 3.3.3.3/32, Status mock"
+}
+
+PLAY RECAP *********************************************************************
+Router-1                   : ok=5    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
+Router-2                   : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
+Router-3                   : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
+
+[2025-10-04 22:18:31] ✅ Facts collection passed
+[2025-10-04 22:18:31] 🔄 Testing NetBox synchronization...
+2025-10-04 22:18:31,200 - INFO - Step 1: Loading device facts...
+2025-10-04 22:18:31,200 - INFO - Loading device facts from JSON files...
+2025-10-04 22:18:31,200 - INFO - Loaded facts for Router-1
+2025-10-04 22:18:31,200 - INFO - Loaded facts for Router-3
+2025-10-04 22:18:31,200 - INFO - Loaded facts for Router-2
+2025-10-04 22:18:31,200 - INFO - Step 2: Connecting to NetBox...
+2025-10-04 22:18:31,201 - INFO - Retrieving current NetBox data...
+2025-10-04 22:18:31,512 - INFO - Retrieved NetBox data for 3 devices
+============================================================
+NetBox Source of Truth Round-Trip Sync
+============================================================
+Started at: 2025-10-04 22:18:31
+✅ Loaded facts from 3 devices
+✅ Retrieved NetBox data for 3 devices
+✅ NetBox sync test completed
+[2025-10-04 22:18:31] ✅ NetBox sync test passed
+[2025-10-04 22:18:31] ⚡ Running performance benchmarks...
+[2025-10-04 22:18:33] 📈 Pipeline benchmark: 2s
+[2025-10-04 22:18:33] 📋 Generating test report...
+[2025-10-04 22:18:33] 📋 Test report generated: /Users/swarnimrajput/Netmind/test_results/test_report.html
+[2025-10-04 22:18:33] [ERROR] ❌ 1 test(s) failed. Check logs for details.

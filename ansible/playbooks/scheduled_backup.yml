@@ -1,0 +1,81 @@
+---
+- name: Automated Configuration Backup with Retention
+  hosts: all
+  gather_facts: true
+  vars:
+    backup_base_dir: "{{ playbook_dir }}/../backups"
+    retention_days: "{{ backup_retention_days | default(30) }}"
+    
+  tasks:
+    - name: Ensure backup directory exists
+      file:
+        path: "{{ backup_base_dir }}/{{ inventory_hostname }}"
+        state: directory
+        mode: '0755'
+      delegate_to: localhost
+      run_once: false
+
+    - name: Get current running configuration
+      raw: vtysh -c "show running-config"
+      register: running_config
+      
+    - name: Get system information
+      raw: vtysh -c "show version"
+      register: system_info
+      
+    - name: Save running configuration
+      copy:
+        content: |
+          ! Backup created: {{ ansible_date_time.iso8601 }}
+          ! Device: {{ inventory_hostname }}
+          ! IP: {{ ansible_host | default(inventory_hostname) }}
+          !
+          {{ running_config.stdout }}
+        dest: "{{ backup_base_dir }}/{{ inventory_hostname }}/{{ ansible_date_time.date }}-{{ ansible_date_time.time }}-running.txt"
+        mode: '0644'
+      delegate_to: localhost
+      
+    - name: Save system information
+      copy:
+        content: |
+          # System information backup
+          # Created: {{ ansible_date_time.iso8601 }}
+          # Device: {{ inventory_hostname }}
+          
+          {{ system_info.stdout }}
+        dest: "{{ backup_base_dir }}/{{ inventory_hostname }}/{{ ansible_date_time.date }}-{{ ansible_date_time.time }}-system.txt"
+        mode: '0644'
+      delegate_to: localhost
+      
+    - name: Create backup manifest
+      copy:
+        content: |
+          {
+            "backup_time": "{{ ansible_date_time.iso8601 }}",
+            "device": "{{ inventory_hostname }}",
+            "device_ip": "{{ ansible_host | default(inventory_hostname) }}",
+            "backup_files": [
+              "{{ ansible_date_time.date }}-{{ ansible_date_time.time }}-running.txt",
+              "{{ ansible_date_time.date }}-{{ ansible_date_time.time }}-system.txt"
+            ],
+            "backup_size_bytes": {{ (running_config.stdout | length) + (system_info.stdout | length) }},
+            "config_lines": {{ running_config.stdout.split('\n') | length }}
+          }
+        dest: "{{ backup_base_dir }}/{{ inventory_hostname }}/{{ ansible_date_time.date }}-{{ ansible_date_time.time }}-manifest.json"
+        mode: '0644'
+      delegate_to: localhost
+      
+    - name: Clean old backups (retention policy)
+      shell: |
+        find {{ backup_base_dir }}/{{ inventory_hostname }}/ -name "*.txt" -type f -mtime +{{ retention_days }} -delete
+        find {{ backup_base_dir }}/{{ inventory_hostname }}/ -name "*.json" -type f -mtime +{{ retention_days }} -delete
+      delegate_to: localhost
+      ignore_errors: true
+      
+    - name: Log backup completion
+      lineinfile:
+        path: "{{ backup_base_dir }}/backup.log"
+        line: "{{ ansible_date_time.iso8601 }} - {{ inventory_hostname }} - SUCCESS - {{ (running_config.stdout | length) }} bytes"
+        create: true
+        mode: '0644'
+      delegate_to: localhost
