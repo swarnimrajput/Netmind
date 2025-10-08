@@ -1,0 +1,161 @@
+{
+  "Router-3": {
+    "device": "Router-3",
+    "status": "Passed",
+    "connection_status": "Connected",
+    "connection_method": "docker_exec",
+    "checks": {
+      "loopback_interface": {
+        "status": "Up",
+        "details": {
+          "name": "lo",
+          "status": "UP",
+          "addresses": [
+            "127.0.0.1/8",
+            "3.3.3.3/32",
+            "10.0.0.3/24"
+          ]
+        }
+      },
+      "connectivity": {
+        "status": "Connected",
+        "method": "docker_exec"
+      }
+    },
+    "intended_state": {
+      "device_name": "Router-3",
+      "bgp_asn": "65003",
+      "loopback_ip": "3.3.3.3/32",
+      "ospf_router_id": "3.3.3.3",
+      "ospf_area": "0",
+      "primary_ip": "Unknown"
+    },
+    "actual_state": {
+      "device_name": "Router-3",
+      "bgp_asn": "Unknown",
+      "bgp_router_id": "Unknown",
+      "loopback_ip": "127.0.0.1/8",
+      "interfaces": {
+        "lo": {
+          "name": "lo",
+          "status": "UP",
+          "addresses": [
+            "127.0.0.1/8",
+            "3.3.3.3/32",
+            "10.0.0.3/24"
+          ]
+        }
+      },
+      "connection_status": "Connected",
+      "connection_method": "docker_exec",
+      "collected_at": "2025-10-08T16:18:49.917271"
+    },
+    "validated_at": "2025-10-08T16:18:49.917437"
+  },
+  "Router-1": {
+    "device": "Router-1",
+    "status": "Passed",
+    "connection_status": "Connected",
+    "connection_method": "docker_exec",
+    "checks": {
+      "loopback_interface": {
+        "status": "Up",
+        "details": {
+          "name": "lo",
+          "status": "UP",
+          "addresses": [
+            "127.0.0.1/8",
+            "1.1.1.1/32",
+            "10.0.0.4/24"
+          ]
+        }
+      },
+      "connectivity": {
+        "status": "Connected",
+        "method": "docker_exec"
+      }
+    },
+    "intended_state": {
+      "device_name": "Router-1",
+      "bgp_asn": "65001",
+      "loopback_ip": "1.1.1.1/32",
+      "ospf_router_id": "1.1.1.1",
+      "ospf_area": "0",
+      "primary_ip": "Unknown"
+    },
+    "actual_state": {
+      "device_name": "Router-1",
+      "bgp_asn": "Unknown",
+      "bgp_router_id": "Unknown",
+      "loopback_ip": "127.0.0.1/8",
+      "interfaces": {
+        "lo": {
+          "name": "lo",
+          "status": "UP",
+          "addresses": [
+            "127.0.0.1/8",
+            "1.1.1.1/32",
+            "10.0.0.4/24"
+          ]
+        }
+      },
+      "connection_status": "Connected",
+      "connection_method": "docker_exec",
+      "collected_at": "2025-10-08T16:18:49.917573"
+    },
+    "validated_at": "2025-10-08T16:18:49.917649"
+  },
+  "Router-2": {
+    "device": "Router-2",
+    "status": "Passed",
+    "connection_status": "Connected",
+    "connection_method": "docker_exec",
+    "checks": {
+      "loopback_interface": {
+        "status": "Up",
+        "details": {
+          "name": "lo",
+          "status": "UP",
+          "addresses": [
+            "127.0.0.1/8",
+            "2.2.2.2/32",
+            "10.0.0.2/24"
+          ]
+        }
+      },
+      "connectivity": {
+        "status": "Connected",
+        "method": "docker_exec"
+      }
+    },
+    "intended_state": {
+      "device_name": "Router-2",
+      "bgp_asn": "65002",
+      "loopback_ip": "2.2.2.2/32",
+      "ospf_router_id": "2.2.2.2",
+      "ospf_area": "0",
+      "primary_ip": "Unknown"
+    },
+    "actual_state": {
+      "device_name": "Router-2",
+      "bgp_asn": "Unknown",
+      "bgp_router_id": "Unknown",
+      "loopback_ip": "127.0.0.1/8",
+      "interfaces": {
+        "lo": {
+          "name": "lo",
+          "status": "UP",
+          "addresses": [
+            "127.0.0.1/8",
+            "2.2.2.2/32",
+            "10.0.0.2/24"
+          ]
+        }
+      },
+      "connection_status": "Connected",
+      "connection_method": "docker_exec",
+      "collected_at": "2025-10-08T16:18:49.927505"
+    },
+    "validated_at": "2025-10-08T16:18:49.927541"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "Router-3": {
+    "device": "Router-3",
+    "status": "Unreachable",
+    "connection_status": "Failed",
+    "error": "TCP connection to device failed.\n\nCommon causes of this problem are:\n1. Incorrect hostname or IP address.\n2. Wrong TCP port.\n3. Intermediate firewall blocking access.\n\nDevice settings: linux R3:22\n\n",
+    "checks": {}
+  },
+  "Router-2": {
+    "device": "Router-2",
+    "status": "Unreachable",
+    "connection_status": "Failed",
+    "error": "TCP connection to device failed.\n\nCommon causes of this problem are:\n1. Incorrect hostname or IP address.\n2. Wrong TCP port.\n3. Intermediate firewall blocking access.\n\nDevice settings: linux R2:22\n\n",
+    "checks": {}
+  },
+  "Router-1": {
+    "device": "Router-1",
+    "status": "Unreachable",
+    "connection_status": "Failed",
+    "error": "TCP connection to device failed.\n\nCommon causes of this problem are:\n1. Incorrect hostname or IP address.\n2. Wrong TCP port.\n3. Intermediate firewall blocking access.\n\nDevice settings: linux R1:22\n\n",
+    "checks": {}
+  }
+}

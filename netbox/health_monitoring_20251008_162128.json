@@ -1,0 +1,119 @@
+{
+  "infrastructure": {
+    "monitored_at": "2025-10-08T16:21:26.397575",
+    "checks": {
+      "netbox_api": {
+        "status": "up",
+        "response_time": 46.42,
+        "netbox_version": "4.3.7",
+        "device_count": 3,
+        "python_version": "3.12.3",
+        "details": "NetBox API is accessible and responding normally"
+      },
+      "docker_system": {
+        "status": "up",
+        "containers_running": 7,
+        "containers_total": 9,
+        "images": 6,
+        "server_version": "28.3.3"
+      }
+    },
+    "overall_status": "up"
+  },
+  "Router-2": {
+    "device": "Router-2",
+    "container": "R2",
+    "monitored_at": "2025-10-08T16:21:27.099616",
+    "checks": {
+      "container": {
+        "status": "running",
+        "container_id": "bb0257865180",
+        "image": "frrouting/frr:latest",
+        "created": "2025-09-08 19:19:15 +0530 IST",
+        "details": {
+          "started_at": "2025-10-08T10:38:57.001959253Z",
+          "status": "running",
+          "image": "frrouting/frr:latest",
+          "ip_address": "10.0.0.2"
+        }
+      },
+      "docker_exec": {
+        "status": "success",
+        "details": "Docker exec working normally",
+        "test_output": "Health Check Test"
+      },
+      "ping": {
+        "status": "down",
+        "ip": "10.0.0.2",
+        "response_time": null,
+        "details": "Ping failed"
+      }
+    },
+    "overall_status": "up",
+    "container_ip": "10.0.0.2"
+  },
+  "Router-3": {
+    "device": "Router-3",
+    "container": "R3",
+    "monitored_at": "2025-10-08T16:21:27.100452",
+    "checks": {
+      "container": {
+        "status": "running",
+        "container_id": "671ccc71dc0b",
+        "image": "frrouting/frr:latest",
+        "created": "2025-09-08 19:19:15 +0530 IST",
+        "details": {
+          "started_at": "2025-10-08T10:38:59.51514413Z",
+          "status": "running",
+          "image": "frrouting/frr:latest",
+          "ip_address": "10.0.0.3"
+        }
+      },
+      "docker_exec": {
+        "status": "success",
+        "details": "Docker exec working normally",
+        "test_output": "Health Check Test"
+      },
+      "ping": {
+        "status": "down",
+        "ip": "10.0.0.3",
+        "response_time": null,
+        "details": "Ping failed"
+      }
+    },
+    "overall_status": "up",
+    "container_ip": "10.0.0.3"
+  },
+  "Router-1": {
+    "device": "Router-1",
+    "container": "R1",
+    "monitored_at": "2025-10-08T16:21:27.099509",
+    "checks": {
+      "container": {
+        "status": "running",
+        "container_id": "6ea8ad54aa6d",
+        "image": "frrouting/frr:latest",
+        "created": "2025-09-08 22:39:07 +0530 IST",
+        "details": {
+          "started_at": "2025-10-08T10:39:00.300590963Z",
+          "status": "running",
+          "image": "frrouting/frr:latest",
+          "ip_address": "10.0.0.4"
+        }
+      },
+      "docker_exec": {
+        "status": "success",
+        "details": "Docker exec working normally",
+        "test_output": "Health Check Test"
+      },
+      "ping": {
+        "status": "down",
+        "ip": "10.0.0.4",
+        "response_time": null,
+        "details": "Ping failed"
+      }
+    },
+    "overall_status": "up",
+    "container_ip": "10.0.0.4"
+  }
+}

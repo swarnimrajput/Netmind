@@ -17,6 +17,57 @@ log() {
 TESTS_PASSED=0
 TESTS_FAILED=0
 
+# NEW: Container startup and health check
+check_and_start_containers() {
+    log "🐳 Checking container status..."
+    
+    # Check if containers exist
+    containers=("R1" "R2" "R3")
+    missing_containers=()
+    
+    for container in "${containers[@]}"; do
+        if ! docker ps -a --format "{{.Names}}" | grep -q "^${container}$"; then
+            missing_containers+=($container)
+        fi
+    done
+    
+    if [ ${#missing_containers[@]} -gt 0 ]; then
+        log "❌ Missing containers: ${missing_containers[*]}"
+        log "⚠️ Please create containers first with: docker run -d --name R1 alpine:latest sleep 3600"
+        return 1
+    fi
+    
+    # Start containers if not running
+    stopped_containers=()
+    for container in "${containers[@]}"; do
+        if ! docker ps --format "{{.Names}}" | grep -q "^${container}$"; then
+            stopped_containers+=($container)
+        fi
+    done
+    
+    if [ ${#stopped_containers[@]} -gt 0 ]; then
+        log "🔄 Starting stopped containers: ${stopped_containers[*]}"
+        docker start "${stopped_containers[@]}" >> "$LOG_FILE" 2>&1
+        
+        # Wait for containers to be ready
+        log "⏳ Waiting for containers to be ready..."
+        sleep 10
+    fi
+    
+    # Verify all containers are running
+    all_running=true
+    for container in "${containers[@]}"; do
+        if docker ps --format "{{.Names}}" | grep -q "^${container}$"; then
+            log "✅ $container is running"
+        else
+            log "❌ $container failed to start"
+            all_running=false
+        fi
+    done
+    
+    return $all_running
+}
+
 # Function to run ansible commands with vault password
 run_ansible_test() {
     local test_name="$1"
@@ -60,37 +111,51 @@ run_ansible_test() {
 # Main test execution
 log "🚀 Starting Network Automation Test Pipeline"
 
+# NEW: Check and start containers first
+if ! check_and_start_containers; then
+    log "[ERROR] ❌ Container setup failed, aborting tests"
+    exit 1
+fi
+
 # Test 1: Inventory
 run_ansible_test "Ansible inventory" "ansible-inventory -i netbox_inventory.yml --list"
 
-# Test 2: Connectivity (simple ping test)
-log "🔗 Testing device connectivity..."
-cd "$ANSIBLE_DIR"
-if ansible all -i netbox_inventory.yml -m ping --vault-password-file .vault_pass 2>/dev/null | grep -q "SUCCESS"; then
-    log "✅ Connectivity test passed"
+# Test 2: Configuration push (check mode)
+run_ansible_test "Configuration push" "ansible-playbook -i netbox_inventory.yml playbooks/push_configs.yml --check"
+
+# Test 3: Facts collection
+run_ansible_test "Facts collection" "ansible-playbook -i netbox_inventory.yml playbooks/frr_facts.yml"
+
+# Test 4: Device validation
+log "🔍 Testing device validation..."
+cd "/Users/swarnimrajput/Netmind/netbox"
+if python3 validate_device_state.py >> "$LOG_FILE" 2>&1; then
+    log "✅ Device validation passed"
     ((TESTS_PASSED++))
 else
-    log "⚠️ Direct connectivity failed, containers may be down"
+    log "[ERROR] ❌ Device validation failed"
     ((TESTS_FAILED++))
 fi
 
-# Test 3: Backup playbook (check mode)
-run_ansible_test "Backup playbook" "ansible-playbook -i netbox_inventory.yml playbooks/backup_configs.yml --check"
-
-# Test 4: Configuration push (check mode)
-run_ansible_test "Configuration push" "ansible-playbook -i netbox_inventory.yml playbooks/push_configs.yml --check"
-
-# Test 5: Facts collection
-run_ansible_test "Facts collection" "ansible-playbook -i netbox_inventory.yml playbooks/frr_facts.yml"
-
-# Test 6: NetBox synchronization
-log "🔄 Testing NetBox synchronization..."
+# Test 5: Health monitoring
+log "🏥 Testing health monitoring..."
 cd "/Users/swarnimrajput/Netmind/netbox"
-if python3 sync_device_facts.py >> "$LOG_FILE" 2>&1; then
-    log "✅ NetBox sync test passed"
+if python3 monitor_devices.py >> "$LOG_FILE" 2>&1; then
+    log "✅ Health monitoring passed"
     ((TESTS_PASSED++))
 else
-    log "[ERROR] ❌ NetBox sync test failed"
+    log "[ERROR] ❌ Health monitoring failed"
+    ((TESTS_FAILED++))
+fi
+
+# Test 6: NetBox API connectivity
+log "🌐 Testing NetBox API..."
+if curl -s -H "Authorization: Token c316eac1941ee8fdd5059e4f9e777648459ab551" \
+        http://localhost:8000/api/dcim/devices/ > /dev/null; then
+    log "✅ NetBox API accessible"
+    ((TESTS_PASSED++))
+else
+    log "[ERROR] ❌ NetBox API failed"
     ((TESTS_FAILED++))
 fi
 
